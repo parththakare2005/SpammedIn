@@ -55,6 +55,12 @@ function loadCompanies() {
       url,
       source: row.origin_source || row.source || "organisation_dataset.csv",
       datasetLabel: row.label_name || null,
+      category: row.category || "",
+      impersonationTarget: row.impersonation_target || "",
+      modusOperandi: row.modus_operandi || "",
+      redFlags: row.red_flags || "",
+      outreachVector: row.outreach_vector || "",
+      riskSeverity: row.risk_severity || "",
       normName: normalizeName(name),
       normUrl: normalizeUrl(url),
     };
@@ -67,6 +73,12 @@ function findCompanyByUrl(rawUrl) {
   if (!url) return null;
   const companies = loadCompanies();
   return companies.find((c) => c.normUrl === url) || null;
+}
+
+function findCompanyByName(name) {
+  const normalizedName = normalizeName(name);
+  if (!normalizedName) return null;
+  return loadCompanies().find((company) => company.normName === normalizedName) || null;
 }
 
 function searchCompaniesByName(query, limit = 20) {
@@ -117,6 +129,7 @@ function findCompaniesForWorkplace(workplace, limit = 5) {
 module.exports = {
   loadCompanies,
   findCompanyByUrl,
+  findCompanyByName,
   searchCompaniesByName,
   findCompaniesForWorkplace,
 };
